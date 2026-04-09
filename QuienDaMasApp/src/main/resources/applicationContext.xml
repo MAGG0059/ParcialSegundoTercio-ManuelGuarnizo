@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <rabbit:connection-factory id="connectionFactory" host="localhost" username="guest" password="guest" />
+    <rabbit:admin connection-factory="connectionFactory" />
+
+    <rabbit:queue name="productos.queue" id="productosQueue" durable="false"/>
+
+    <rabbit:queue name="winner.queue" id="winnerQueue" durable="false"/>
+
+    <rabbit:direct-exchange name="QDM-EXCHANGE" id="myExchange" durable="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="productosQueue" key="productos"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <rabbit:direct-exchange name="WINNER-EXCHANGE" id="winnerExchange" durable="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="winnerQueue" key="winner"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <rabbit:template id="rabbitTemplate" connection-factory="connectionFactory" exchange="QDM-EXCHANGE"/>
+
+    <bean id="messageListener" class="edu.eci.arsw.exam.events.OffertMessageListener">
+        <property name="rabbitTemplate" ref="rabbitTemplate"/>
+    </bean>
+
+    <bean id="winnerMessageListener" class="edu.eci.arsw.exam.events.WinnerMessageListener"/>
+
+    <bean id="ofertaListener" class="edu.eci.arsw.exam.events.OfertaListener"/>
+
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener ref="ofertaListener" queues="ofertas.queue" method="recibirOferta"/>
+    </rabbit:listener-container>
+
+    <rabbit:listener-container id="myListenerContainer" connection-factory="connectionFactory">
+        <rabbit:listener ref="messageListener" queues="productosQueue" />
+        <rabbit:listener ref="winnerMessageListener" queues="winnerQueue" />
+    </rabbit:listener-container>
+
+</beans>s
