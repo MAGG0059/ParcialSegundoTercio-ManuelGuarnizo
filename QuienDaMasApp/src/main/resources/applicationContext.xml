@@ -15,7 +15,6 @@
     <rabbit:admin connection-factory="connectionFactory" />
 
     <rabbit:queue name="productos.queue" id="productosQueue" durable="false"/>
-
     <rabbit:queue name="winner.queue" id="winnerQueue" durable="false"/>
 
     <rabbit:direct-exchange name="QDM-EXCHANGE" id="myExchange" durable="false">
@@ -38,15 +37,9 @@
 
     <bean id="winnerMessageListener" class="edu.eci.arsw.exam.events.WinnerMessageListener"/>
 
-    <bean id="ofertaListener" class="edu.eci.arsw.exam.events.OfertaListener"/>
-
-    <rabbit:listener-container connection-factory="connectionFactory">
-        <rabbit:listener ref="ofertaListener" queues="ofertas.queue" method="recibirOferta"/>
-    </rabbit:listener-container>
-
     <rabbit:listener-container id="myListenerContainer" connection-factory="connectionFactory">
         <rabbit:listener ref="messageListener" queues="productosQueue" />
         <rabbit:listener ref="winnerMessageListener" queues="winnerQueue" />
     </rabbit:listener-container>
 
-</beans>s
+</beans>

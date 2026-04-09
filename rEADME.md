@@ -5,14 +5,17 @@
 
 ###  Cambiamos la versión de java en ambos pom
 ![alt text](image-3.png)
+![alt text](image-6.png)
 
 
 ### Creamos las clases necesarias para responder a las ofertas y tambien recibir el ganador
 
 
-## no alcance a poner el funcionamiento
+## el funcionamiento
+![alt text](image-5.png)
 
-## diagrama de arquitectura 
+
+## diagrama de arquitectura (AUNQUE NO NOTIFICA A EL CLIENTE)
 
 ![alt text](image-4.png)
 
