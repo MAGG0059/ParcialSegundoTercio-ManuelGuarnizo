@@ -13,6 +13,7 @@
 
 ## el funcionamiento
 ![alt text](image-5.png)
+![alt text](image-7.png)
 
 
 ## diagrama de arquitectura (AUNQUE NO NOTIFICA A EL CLIENTE)
